@@ -1,16 +1,50 @@
-import datetime
+from datetime import date
 from typing import Optional
-from sqlmodel import Field, SQLModel, create_engine
+from sqlmodel import Field, SQLModel, create_engine, Relationship
 
-class Artist(SQLModel, Table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
-    name: str
+class ArtistFestivalLink(SQLModel, table=True):
+    artist_id: Optional[int] = Field(default=None, foreign_key="artist.id", primary_key=True)
+    festival_id: Optional[int] = Field(default=None, foreign_key="festival.id", primary_key=True)
+
+class ArtistBase(SQLModel):
+    name: str = Field(index=True)
     real_name: str
     age: int
 
-class Festival(SQLModel, Table=True):
+class Artist(ArtistBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
-    name: str
+    festivals: list["Festival"] = Relationship(back_populates="artists", link_model= ArtistFestivalLink)
+
+class ArtistCreate(ArtistBase):
+    pass
+
+class ArtistPublic(ArtistBase):
+    id: int
+
+class ArtistUpdate(SQLModel):
+    name: Optional[str] = None
+    real_name: Optional[str] = None
+    age: Optional[int] = None
+
+class FestivalBase(SQLModel):
+    name: str  = Field(index=True)
     crowd_capacity: int
-    start_date: datetime.date
-    end_date: datetime.date
+    start_date: date
+    end_date: date
+
+class Festival(FestivalBase, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    artists: list[Artist] = Relationship(back_populates="festivals", link_model= ArtistFestivalLink)
+
+class FestivalCreate(FestivalBase):
+    pass
+
+class FestivalPublic(FestivalBase):
+    id: int
+
+class FestivalUpdate(SQLModel):
+    name: Optional[str] = None
+    crowd_capacity: Optional[int] = None
+    start_date: Optional[date] = None
+    end_date: Optional[date] = None
+

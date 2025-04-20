@@ -1,5 +1,4 @@
 from contextlib import asynccontextmanager
-
 from fastapi import FastAPI
 from sqlalchemy import create_engine
 from sqlmodel import SQLModel, Session
@@ -19,5 +18,4 @@ def get_session():
 async def lifespan(app: FastAPI):
     create_db_and_tables()
     yield
-
     print("Closing the program...")
