@@ -10,11 +10,11 @@ app = FastAPI(lifespan=lifespan)
 @app.get("/")
 async def welcome():
     welcome_message = ("""Welcome to the Artist & Festival API. This API allows you to create, read, update and delete both artists and festivals. Furthermore, there are additional features such as:
-                       - Being able to view all the artists that will perform in a specific festival" 
-                       - Being able to view all the festivals in which an artist will perform"
-                       - Hell yea"
-                       - Hell na"
-                       - Hell why""")
+                       - View all the artists that will perform in a specific festival." 
+                       - View all the festivals in which an artist will perform."
+                       - View a list of all the festivals ordered by date (ascendent or descendent)."
+                       - View festivals based on location, you can input the name of the country, state (for the USA) or city."
+                       - View artists based on genre.""")
     return welcome_message
 
 @app.get("/artists/", response_model=List[ArtistPublic])
@@ -124,19 +124,46 @@ def get_artists_from_festival_id(festival_id: int):
     with Session(engine) as session:
         festival = session.get(Festival, festival_id)
         if not festival:
-            raise HTTPException(status_code=404, detail="Festival not found")
+            raise HTTPException(status_code=404, detail="Artists not found")
         return festival.artists
 
-@app.get("festivals/{order}}")
+@app.get("/festivals/date/{order}", response_model=list[FestivalPublic])
 def get_festivals_ordered_by_date(order: str):
     with Session(engine) as session:
+        query = select(Festival)
+
         if order == "ascendent":
-            festivals_ordered = session.exec(select(Festival).order_by(Festival.start_date)).all
+            query = query.order_by(Festival.start_date)
         elif order == "descendent":
-            festivals_ordered = session.exec(select(Festival).order_by(desc(Festival.start_date))).all
+            query = query.order_by(desc(Festival.start_date))
+        else: raise HTTPException(status_code=400, detail="Invalid parameter, please write ascendent or descendent.")
+
+        festivals_ordered = session.exec(query).all()
 
         if not festivals_ordered:
-            raise HTTPException(status_code=404, detail="Festival not found")
+            raise HTTPException(status_code=404, detail="Festivals not found")
         return festivals_ordered
+
+@app.get("/festivals/location/{festival_location}", response_model=list[FestivalPublic])
+def get_festivals_based_on_location(festival_location: str):
+    with Session(engine) as session:
+        query = select(Festival).where(Festival.location.like(f"%{festival_location}%"))
+
+        festivals_filtered = session.exec(query).all()
+
+        if not festivals_filtered:
+            raise HTTPException(status_code=404, detail="Festivals not found")
+        return festivals_filtered
+
+@app.get("/artists/genre/{genre_name}", response_model=list[ArtistPublic])
+def get_artists_based_on_genre(genre_name: str):
+    with Session(engine) as session:
+        query = select(Artist).where(Artist.genre.like(f"%{genre_name}%"))
+
+        artists_filtered = session.exec(query).all()
+
+        if not artists_filtered:
+            raise HTTPException(status_code=404, detail="Festivals not found")
+        return artists_filtered
 
 

@@ -10,6 +10,7 @@ class ArtistBase(SQLModel):
     name: str = Field(index=True)
     real_name: str
     age: int
+    genre: str
 
 class Artist(ArtistBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
@@ -25,12 +26,14 @@ class ArtistUpdate(SQLModel):
     name: Optional[str] = None
     real_name: Optional[str] = None
     age: Optional[int] = None
+    genre: Optional[str] = None
 
 class FestivalBase(SQLModel):
     name: str  = Field(index=True)
     crowd_capacity: int
     start_date: date
     end_date: date
+    location: str
 
 class Festival(FestivalBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
@@ -47,4 +50,5 @@ class FestivalUpdate(SQLModel):
     crowd_capacity: Optional[int] = None
     start_date: Optional[date] = None
     end_date: Optional[date] = None
+    location: Optional[str] = None
 
