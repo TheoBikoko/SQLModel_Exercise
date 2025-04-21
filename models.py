@@ -1,6 +1,6 @@
 from datetime import date
 from typing import Optional
-from sqlmodel import Field, SQLModel, create_engine, Relationship
+from sqlmodel import Field, SQLModel, Relationship
 
 class ArtistFestivalLink(SQLModel, table=True):
     artist_id: Optional[int] = Field(default=None, foreign_key="artist.id", primary_key=True)
