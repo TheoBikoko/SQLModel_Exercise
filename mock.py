@@ -25,7 +25,6 @@ def create_samples():
         artist_rosalia = Artist(name="Rosalía", real_name="Rosalía Vila Tobella", age=31, genre="Flamenco Pop")
         artist_metro = Artist(name="Metro Boomin", real_name="Leland Tyler Wayne", age=31, genre="Hip-Hop Production")
 
-
         festival_rockinrio = Festival(name="Rock In Rio", crowd_capacity=40000, start_date=date(2025,9,13), end_date=date(2025,9,22), location="Rio de Janeiro, Brazil", artists=[artist_hendrix, artist_future, artist_pinkpantheress, artist_bowie, artist_marley])
         festival_primaverasound = Festival(name="Primavera Sound", crowd_capacity=85000, start_date=date(2025,6,4), end_date=date(2025,6,8), location="Barcelona, Spain", artists=[artist_whitney, artist_kendrick, artist_adele, artist_elton, artist_lizzo])
         festival_tomorrowland = Festival(name="Tomorrowland", crowd_capacity=200000, start_date=date(2025,10,10), end_date=date(2025,10,12), location ="Boom, Belgium", artists=[artist_billie, artist_ariana, artist_weeknd, artist_drake, artist_taylor])
@@ -46,7 +45,6 @@ def create_samples():
         festival_sonar = Festival(name="Sónar Festival", crowd_capacity=120000, start_date=date(2025, 6, 13), end_date=date(2025, 6, 15), location="Barcelona, Spain", artists=[artist_whitney, artist_kendrick, artist_adele, artist_elton, artist_lizzo])
         festival_outsidelands = Festival(name="Outside Lands", crowd_capacity=75000, start_date=date(2025, 8, 8), end_date=date(2025, 8, 10), location="San Francisco, California, USA", artists=[artist_billie, artist_ariana, artist_weeknd, artist_drake, artist_taylor])
         festival_pitchfork = Festival(name="Pitchfork Music Festival", crowd_capacity=20000, start_date=date(2025, 7, 18), end_date=date(2025, 7, 20), location="Chicago, Illinois, USA", artists=[artist_bruno, artist_rihanna, artist_bad_bunny, artist_rosalia, artist_metro])
-
 
         session.add(festival_rockinrio)
         session.add(festival_primaverasound)
@@ -92,8 +90,6 @@ def create_samples():
         session.refresh(festival_outsidelands)
         session.refresh(festival_pitchfork)
 
-        
-
         print("Created artist:", artist_hendrix)
         print("Created artist:", artist_future)
         print("Created artist:", artist_pinkpantheress)
@@ -135,7 +131,6 @@ def create_samples():
         print("Created festival:", festival_sonar)
         print("Created festival:", festival_outsidelands)
         print("Created festival:", festival_pitchfork)
-
 
 def main():
     create_db_and_tables()
